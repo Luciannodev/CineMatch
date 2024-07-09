@@ -7,6 +7,7 @@ import br.com.ludevsp.domain.interfaces.repositories.UserRepository;
 import br.com.ludevsp.domain.interfaces.usecase.UserUseCase;
 import org.springframework.stereotype.Service;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 @Service
@@ -19,12 +20,15 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public User createUser(User userRequest) {
+        User User = userRepository.findByIdentificationNumber(userRequest.getIdentificationNumber());
+        if(User != null)
+            throw new InvalidParameterException("User already exists");
         return userRepository.save(userRequest);
     }
 
     @Override
-    public void deleteUser(long email) {
-        var user = userRepository.findByUserId(email);
+    public void deleteUser(long idUser) {
+        var user = userRepository.findByUserId(idUser);
         if(user == null)
             throw new UserNotFoundException("User not found");
         userRepository.delete(user);
