@@ -17,7 +17,7 @@ dependencies {
         testImplementation(platform("org.junit:junit-bom:5.9.1"))
         testImplementation("org.junit.jupiter:junit-jupiter")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
-
+        implementation("mysql:mysql-connector-java:8.0.28")
 }
 
 tasks.test {

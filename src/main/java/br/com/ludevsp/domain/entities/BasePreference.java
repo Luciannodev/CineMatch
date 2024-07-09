@@ -2,44 +2,40 @@ package br.com.ludevsp.domain.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @MappedSuperclass
 public abstract class BasePreference {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @ManyToOne
+    @Column(name = "id")
+    private long id;
+    @OneToMany
     @JoinColumn(name = "user_id")
-    private User user;
-    @ManyToOne
+    private List<User> user;
+    @OneToMany
     @JoinColumn(name = "movie_id")
-    private Movie movie;
+    private List<Movie> movie;
 
-    public BasePreference(User user, Movie movie) {
+
+    public BasePreference(List<User> user, List<Movie> movie) {
         this.user = user;
         this.movie = movie;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public User getUser() {
+    public List<User> getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(List<User> user) {
         this.user = user;
     }
 
-    public Movie getMovie() {
+    public List<Movie> getMovie() {
         return movie;
     }
 
-    public void setMovie(Movie movie) {
+    public void setMovie(List<Movie> movie) {
         this.movie = movie;
     }
 }

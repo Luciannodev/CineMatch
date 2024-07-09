@@ -1,10 +1,10 @@
 package br.com.ludevsp.domain.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
-import org.springframework.data.annotation.Id;
+
+
+
+
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -12,20 +12,46 @@ import java.time.LocalDate;
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer movieId;
+    @Column(name = "movie_id")
+    private Long  movieId;
+
+    @Column(name = "title", nullable = false)
     private String title;
+
+    @Column(name = "original_title", nullable = false)
     private String originalTitle;
+
+    @Column(name = "original_language", nullable = false)
     private String originalLanguage;
+
+    @Column(name = "overview", nullable = false)
     private String overview;
+
+    @Column(name = "release_date", nullable = false)
     private LocalDate releaseDate;
+
+    @Column(name = "vote_average", nullable = false)
     private Float voteAverage;
+
+    @Column(name = "vote_count", nullable = false)
     private Integer voteCount;
 
-    public Integer getMovieId() {
+    public Movie(Long  movieId, String title, String originalTitle, String originalLanguage, String overview, LocalDate releaseDate, Float voteAverage, Integer voteCount) {
+        this.movieId = movieId;
+        this.title = title;
+        this.originalTitle = originalTitle;
+        this.originalLanguage = originalLanguage;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+        this.voteAverage = voteAverage;
+        this.voteCount = voteCount;
+    }
+
+    public Number getMovieId() {
         return movieId;
     }
 
-    public void setMovieId(Integer movieId) {
+    public void setMovieId(Long  movieId) {
         this.movieId = movieId;
     }
 

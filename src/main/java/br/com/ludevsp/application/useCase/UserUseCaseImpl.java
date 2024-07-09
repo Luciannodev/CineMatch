@@ -2,15 +2,23 @@ package br.com.ludevsp.application.useCase;
 
 import br.com.ludevsp.domain.entities.Movie;
 import br.com.ludevsp.domain.entities.User;
+import br.com.ludevsp.domain.interfaces.repositories.UserRepository;
 import br.com.ludevsp.domain.interfaces.usecase.UserUseCase;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserUseCaseImpl implements UserUseCase {
+    private  UserRepository userRepository;
+
+    public UserUseCaseImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Override
     public User createUser(User userRequest) {
-
-        return new User();
+        return userRepository.save(userRequest);
     }
 
     @Override
