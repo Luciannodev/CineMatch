@@ -7,6 +7,7 @@ import br.com.ludevsp.domain.interfaces.repositories.UserRepository;
 import br.com.ludevsp.domain.interfaces.usecase.UserUseCase;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.security.InvalidParameterException;
 import java.util.List;
 
@@ -35,8 +36,26 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     @Override
-    public void updateUser(User userRequest) {
+    public User updateUser(User userRequest) {
+        var existingUser = userRepository.findByUserId(userRequest.getUserId());
+        if(existingUser == null)
+            throw new UserNotFoundException("User not found");
+        SetNewValueEntity(userRequest, existingUser);
+        return userRepository.save(existingUser);
+    }
 
+    private static void SetNewValueEntity(User userRequest, User existingUser) {
+        for(Field field : User.class.getDeclaredFields()){
+            field.setAccessible(true);
+            try {
+                Object newValue = field.get(userRequest);
+                if(newValue != null)
+                    field.set(existingUser, newValue);
+            }
+            catch (IllegalAccessException e){
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

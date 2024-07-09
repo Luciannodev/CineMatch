@@ -35,4 +35,12 @@ public class UserController {
         return new ResponseEntity<>(new ApiResponse<>("user successfully deleted"), HttpStatus.OK);
 
     }
+    @RequestMapping(value = "/update_user", method = RequestMethod.PUT)
+    public ResponseEntity<ApiResponse<UserResponseDto>> updateUser(@RequestParam Number id, @RequestBody UserRequestDto userRequestDto) {
+        var userEntity = userRequestDto.toEntity();
+        userEntity.setUserId(id.longValue());
+        var user = userService.updateUser(userEntity);
+        return new ResponseEntity<>(new ApiResponse<>(UserMapper.toDto(user)), HttpStatus.OK);
+
+    }
 }

@@ -9,7 +9,7 @@ public interface UserUseCase {
     User createUser(User userRequest);
     void deleteUser(long idUser);
 
-    void updateUser(User userRequest);
+    User updateUser(User userRequest);
     User getUser(String email);
     List<User> getAllUsers();
     void addFavoriteMovie(String email, String movieId);
