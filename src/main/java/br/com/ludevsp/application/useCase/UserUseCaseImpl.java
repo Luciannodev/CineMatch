@@ -2,6 +2,7 @@ package br.com.ludevsp.application.useCase;
 
 import br.com.ludevsp.domain.entities.Movie;
 import br.com.ludevsp.domain.entities.User;
+import br.com.ludevsp.domain.exceptions.UserNotFoundException;
 import br.com.ludevsp.domain.interfaces.repositories.UserRepository;
 import br.com.ludevsp.domain.interfaces.usecase.UserUseCase;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,11 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     @Override
-    public void deleteUser(String email) {
-
+    public void deleteUser(long email) {
+        var user = userRepository.findByUserId(email);
+        if(user == null)
+            throw new UserNotFoundException("User not found");
+        userRepository.delete(user);
     }
 
     @Override

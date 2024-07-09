@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface UserUseCase {
     User createUser(User userRequest);
-    void deleteUser(String email);
+    void deleteUser(long email);
+
     void updateUser(User userRequest);
     User getUser(String email);
     List<User> getAllUsers();

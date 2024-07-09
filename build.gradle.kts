@@ -18,6 +18,11 @@ dependencies {
         testImplementation("org.junit.jupiter:junit-jupiter")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         implementation("mysql:mysql-connector-java:8.0.28")
+        compileOnly ("org.projectlombok:lombok:1.18.34")
+        annotationProcessor ("org.projectlombok:lombok:1.18.34")
+        testCompileOnly ("org.projectlombok:lombok:1.18.34")
+        testAnnotationProcessor ("org.projectlombok:lombok:1.18.34")
+
 }
 
 tasks.test {

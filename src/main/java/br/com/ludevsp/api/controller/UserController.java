@@ -5,11 +5,13 @@ import br.com.ludevsp.api.controller.mapper.UserMapper;
 import br.com.ludevsp.api.dto.UserRequestDto;
 import br.com.ludevsp.api.dto.UserResponseDto;
 import br.com.ludevsp.application.useCase.UserUseCaseImpl;
+import br.com.ludevsp.domain.exceptions.UserNotFoundException;
 import br.com.ludevsp.domain.interfaces.usecase.UserUseCase;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.security.auth.login.AccountNotFoundException;
 
 @RestController
 public class UserController {
@@ -20,9 +22,16 @@ public class UserController {
     }
 
     @RequestMapping(value = "/create_user", method = RequestMethod.POST)
-    public UserResponseDto createUser(@RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto userRequestDto) {
         var user = userService.createUser(userRequestDto.toEntity());
-        return UserMapper.toDto(user);
+        return new ResponseEntity<>(UserMapper.toDto(user), HttpStatus.CREATED);
+
+    }
+
+    @RequestMapping(value = "/delete_user", method = RequestMethod.DELETE)
+    public ResponseEntity<UserResponseDto> deleteUser(@RequestParam Number id_user) throws AccountNotFoundException {
+            userService.deleteUser(id_user.longValue());
+            return new ResponseEntity<>(HttpStatus.OK);
 
     }
 }
