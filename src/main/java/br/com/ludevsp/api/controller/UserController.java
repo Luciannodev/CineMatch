@@ -2,17 +2,17 @@ package br.com.ludevsp.api.controller;
 
 
 import br.com.ludevsp.api.controller.mapper.UserMapper;
+import br.com.ludevsp.api.dto.UserQueryDTO;
 import br.com.ludevsp.api.dto.UserRequestDto;
 import br.com.ludevsp.api.dto.UserResponseDto;
 import br.com.ludevsp.application.useCase.UserUseCaseImpl;
 import br.com.ludevsp.domain.dto.ApiResponse;
-import br.com.ludevsp.domain.exceptions.UserNotFoundException;
 import br.com.ludevsp.domain.interfaces.usecase.UserUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.security.auth.login.AccountNotFoundException;
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -41,6 +41,12 @@ public class UserController {
         userEntity.setUserId(id.longValue());
         var user = userService.updateUser(userEntity);
         return new ResponseEntity<>(new ApiResponse<>(UserMapper.toDto(user)), HttpStatus.OK);
+
+    }
+    @RequestMapping(value = "/get_user", method = RequestMethod.GET)
+    public ResponseEntity<ApiResponse<List<UserResponseDto>>> getUser(@ModelAttribute UserQueryDTO userDTOQuery) {
+        var users = userService.getUsers(userDTOQuery);
+        return new ResponseEntity<>(new ApiResponse<>(users.stream().map(UserMapper::toDto).toList()), HttpStatus.OK);
 
     }
 }

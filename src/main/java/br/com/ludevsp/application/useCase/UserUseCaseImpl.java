@@ -1,10 +1,14 @@
 package br.com.ludevsp.application.useCase;
 
+import br.com.ludevsp.api.dto.UserQueryDTO;
 import br.com.ludevsp.domain.entities.Movie;
 import br.com.ludevsp.domain.entities.User;
 import br.com.ludevsp.domain.exceptions.UserNotFoundException;
 import br.com.ludevsp.domain.interfaces.repositories.UserRepository;
 import br.com.ludevsp.domain.interfaces.usecase.UserUseCase;
+import jakarta.persistence.criteria.Predicate;
+import org.springframework.data.domain.Example;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -59,13 +63,28 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     @Override
-    public User getUser(String email) {
-        return null;
+    public List<User> getUsers(UserQueryDTO queryUser) {
+        return userRepository.findAll(userSpecification(queryUser));
     }
 
-    @Override
-    public List<User> getAllUsers() {
-        return null;
+    public static Specification<User> userSpecification(UserQueryDTO queryDTO) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.conjunction();
+
+            for (Field field : UserQueryDTO.class.getDeclaredFields()) {
+                field.setAccessible(true);
+                try {
+                    Object value = field.get(queryDTO);
+                    if (value != null) {
+                        predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get(field.getName()), value));
+                    }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return predicate;
+        };
     }
 
     @Override

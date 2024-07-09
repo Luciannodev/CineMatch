@@ -1,5 +1,6 @@
 package br.com.ludevsp.domain.interfaces.usecase;
 
+import br.com.ludevsp.api.dto.UserQueryDTO;
 import br.com.ludevsp.domain.entities.Movie;
 import br.com.ludevsp.domain.entities.User;
 
@@ -10,8 +11,7 @@ public interface UserUseCase {
     void deleteUser(long idUser);
 
     User updateUser(User userRequest);
-    User getUser(String email);
-    List<User> getAllUsers();
+    List<User> getUsers(UserQueryDTO queryUser);
     void addFavoriteMovie(String email, String movieId);
     void addHatedMovie(String email, String movieId);
     void addSuggestedMovie(String email, String movieId);
