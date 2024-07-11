@@ -13,4 +13,11 @@ public class UserQueryDTO {
     private  String email;
 
     private String identificationNumber;
+
+    public UserQueryDTO(Number userId, String name, String email, String identificationNumber) {
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+        this.identificationNumber = identificationNumber;
+    }
 }

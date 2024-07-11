@@ -4,10 +4,11 @@ import br.com.ludevsp.api.dto.UserQueryDTO;
 import br.com.ludevsp.domain.entities.Movie;
 import br.com.ludevsp.domain.entities.User;
 import br.com.ludevsp.domain.exceptions.UserNotFoundException;
+import br.com.ludevsp.domain.interfaces.repositories.FavoriteMoviesRepository;
 import br.com.ludevsp.domain.interfaces.repositories.UserRepository;
+import br.com.ludevsp.domain.interfaces.services.MovieService;
 import br.com.ludevsp.domain.interfaces.usecase.UserUseCase;
 import jakarta.persistence.criteria.Predicate;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +19,19 @@ import java.util.List;
 @Service
 public class UserUseCaseImpl implements UserUseCase {
     private  UserRepository userRepository;
+    private FavoriteMoviesRepository favoriteMoviesRepository;
 
-    public UserUseCaseImpl(UserRepository userRepository) {
+    private MovieService movieService;
+
+    public UserUseCaseImpl(UserRepository userRepository, FavoriteMoviesRepository favoriteMoviesRepository, MovieService movieService) {
         this.userRepository = userRepository;
+        this.favoriteMoviesRepository = favoriteMoviesRepository;
+        this.movieService = movieService;
     }
 
     @Override
     public User createUser(User userRequest) {
-        User User = userRepository.findByIdentificationNumber(userRequest.getIdentificationNumber());
+        User User = userRepository.findByEmail(userRequest.getEmail());
         if(User != null)
             throw new InvalidParameterException("User already exists");
         return userRepository.save(userRequest);
@@ -64,10 +70,10 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public List<User> getUsers(UserQueryDTO queryUser) {
-        return userRepository.findAll(userSpecification(queryUser));
+        return userRepository.findAll(this.userSpecification(queryUser));
     }
 
-    public static Specification<User> userSpecification(UserQueryDTO queryDTO) {
+    public Specification<User> userSpecification(UserQueryDTO queryDTO) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
 
@@ -88,8 +94,13 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     @Override
-    public void addFavoriteMovie(String email, String movieId) {
-
+    public void addFavoriteMovie(Number userId, String movieName) {
+        var user = userRepository.findByUserId(userId.longValue());
+        if(user == null)
+            throw new UserNotFoundException("User not found");
+        var movie = movieService.getMovie(movieName);
+        if(movie == null)
+            throw new InvalidParameterException("Movie not found");
     }
 
     @Override

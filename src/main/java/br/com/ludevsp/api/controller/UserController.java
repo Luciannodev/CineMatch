@@ -8,6 +8,7 @@ import br.com.ludevsp.api.dto.UserResponseDto;
 import br.com.ludevsp.application.useCase.UserUseCaseImpl;
 import br.com.ludevsp.domain.dto.ApiResponse;
 import br.com.ludevsp.domain.interfaces.usecase.UserUseCase;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +48,13 @@ public class UserController {
     public ResponseEntity<ApiResponse<List<UserResponseDto>>> getUser(@ModelAttribute UserQueryDTO userDTOQuery) {
         var users = userService.getUsers(userDTOQuery);
         return new ResponseEntity<>(new ApiResponse<>(users.stream().map(UserMapper::toDto).toList()), HttpStatus.OK);
+
+    }
+
+    @RequestMapping(value = "/add_favorite_movie", method = RequestMethod.POST)
+    public ResponseEntity<ApiResponse<String>> addFavoriteMovie(@RequestParam Number idUser, @RequestParam String movieName) {
+        userService.addFavoriteMovie(idUser, movieName);
+        return new ResponseEntity<>(new ApiResponse<>("movie successfully added to favorites"), HttpStatus.OK);
 
     }
 }

@@ -1,5 +1,6 @@
 package br.com.ludevsp.domain.exceptions;
 
+import br.com.ludevsp.domain.dto.ApiResponse;
 import br.com.ludevsp.domain.exceptions.dto.ErroDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +13,12 @@ import java.security.InvalidParameterException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErroDTO> handleUserNotFoundException(UserNotFoundException ex) {
-        return new ResponseEntity<>(new ErroDTO(ex.getMessage(),404), HttpStatus.NOT_FOUND);
+    public ResponseEntity <ApiResponse<ErroDTO>> handleUserNotFoundException(UserNotFoundException ex) {
+        return new ResponseEntity<>(new ApiResponse<>(new ErroDTO(ex.getMessage(),404),false), HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(InvalidParameterException.class)
-    public ResponseEntity<ErroDTO> handleInvalidParameterException(InvalidParameterException ex) {
-        return new ResponseEntity<>(new ErroDTO(ex.getMessage(),400), HttpStatus.BAD_REQUEST);
+    public ResponseEntity <ApiResponse<ErroDTO>> handleInvalidParameterException(InvalidParameterException ex) {
+        return new ResponseEntity<>(new ApiResponse<>(new ErroDTO(ex.getMessage(),400),false), HttpStatus.BAD_REQUEST);
     }
 
 }

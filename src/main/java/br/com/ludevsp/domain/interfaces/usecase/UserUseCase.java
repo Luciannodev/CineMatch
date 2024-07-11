@@ -12,7 +12,7 @@ public interface UserUseCase {
 
     User updateUser(User userRequest);
     List<User> getUsers(UserQueryDTO queryUser);
-    void addFavoriteMovie(String email, String movieId);
+    void addFavoriteMovie(Number email, String movieName);
     void addHatedMovie(String email, String movieId);
     void addSuggestedMovie(String email, String movieId);
     void removeFavoriteMovie(String email, String movieId);

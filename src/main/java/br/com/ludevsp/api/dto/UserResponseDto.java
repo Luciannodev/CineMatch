@@ -9,13 +9,11 @@ public class UserResponseDto {
     private  String email;
     private  String password;
 
-    private  String indentificationNumber;
 
-    public UserResponseDto(long userId,String name, String email, String password, String indentificationNumber) {
+    public UserResponseDto(long userId,String name, String email, String password) {
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.indentificationNumber = indentificationNumber;
     }
 }

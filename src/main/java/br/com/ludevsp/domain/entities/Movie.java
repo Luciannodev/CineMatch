@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "movies")
+@Table(name = "movie")
 @NoArgsConstructor
 @Data
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "movie_id")
-    private Long  movieId;
+    private Long movieId;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -35,10 +35,10 @@ public class Movie {
     @Column(name = "release_date", nullable = false)
     private LocalDate releaseDate;
 
-    @Column(name = "vote_average", nullable = false)
+    @Column(name = "voto_average", nullable = false)
     private Float voteAverage;
 
-    @Column(name = "vote_count", nullable = false)
+    @Column(name = "voto_count", nullable = false)
     private Integer voteCount;
 
     public Movie(Long  movieId, String title, String originalTitle, String originalLanguage, String overview, LocalDate releaseDate, Float voteAverage, Integer voteCount) {

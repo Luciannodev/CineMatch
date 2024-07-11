@@ -7,13 +7,11 @@ public class UserRequestDto {
     private final String email;
     private final String password;
 
-    private final String indentificationNumber;
 
     public UserRequestDto(String name, String email, String password, String indentificationNumber) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.indentificationNumber = indentificationNumber;
     }
 
     public String getName() {
@@ -28,11 +26,7 @@ public class UserRequestDto {
         return password;
     }
 
-    public String getIndentificationNumber() {
-        return indentificationNumber;
-    }
-
     public User toEntity() {
-        return new User(name, indentificationNumber, email, password);
+        return new User(name, email, password);
     }
 }

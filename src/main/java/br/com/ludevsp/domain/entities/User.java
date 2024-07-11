@@ -14,14 +14,11 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long  userId;
+    @Column(name = "id_user")
+    private Long userId;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "identification_number", nullable = false)
-    private String identificationNumber;
+    @Column(name = "username", nullable = false)
+    private String username;
 
     @Column(name = "email", nullable = false)
     private String email;
@@ -29,16 +26,14 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "create_date", nullable = false, updatable = false)
-    private LocalDateTime createDate = LocalDateTime.now();
+    @Column(name = "create_time")
+    private LocalDateTime createTime;
 
-    public User(String name, String identificationNumber, String email, String password) {
-        this.name = name;
-        this.identificationNumber = identificationNumber;
+    public User(String username, String email, String password) {
+        this.username = username;
         this.email = email;
         this.password = password;
     }
-
 }
 
 
