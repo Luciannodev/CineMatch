@@ -13,12 +13,13 @@ import java.security.InvalidParameterException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity <ApiResponse<ErroDTO>> handleUserNotFoundException(UserNotFoundException ex) {
-        return new ResponseEntity<>(new ApiResponse<>(new ErroDTO(ex.getMessage(),404),false), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ApiResponse<ErroDTO>> handleUserNotFoundException(UserNotFoundException ex) {
+        return new ResponseEntity<>(new ApiResponse<>(new ErroDTO(ex.getMessage(), 404), false), HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(InvalidParameterException.class)
-    public ResponseEntity <ApiResponse<ErroDTO>> handleInvalidParameterException(InvalidParameterException ex) {
-        return new ResponseEntity<>(new ApiResponse<>(new ErroDTO(ex.getMessage(),400),false), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiResponse<ErroDTO>> handleInvalidParameterException(InvalidParameterException ex) {
+        return new ResponseEntity<>(new ApiResponse<>(new ErroDTO(ex.getMessage(), 400), false), HttpStatus.BAD_REQUEST);
     }
 
 }

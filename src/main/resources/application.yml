@@ -7,3 +7,8 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+TMDB:
+  api:
+    key: eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZDE3NzVkN2JiMThlOTdlNGUxMGE3NzQ5NTk5YTcyOCIsIm5iZiI6MTcxOTc0OTU5Ni4wMTExOTYsInN1YiI6IjY2N2Q5MWY4YTVjNDA3ZDMxMzExZjVjOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.o8c6qeuZjRvuLUaEB5ujv9aDJockM7Pkn0rQfl_fcXk
+    url: https://api.themoviedb.org/3
+    language: pt-BR

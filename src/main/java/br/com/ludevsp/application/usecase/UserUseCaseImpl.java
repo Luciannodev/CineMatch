@@ -1,10 +1,9 @@
-package br.com.ludevsp.application.useCase;
+package br.com.ludevsp.application.usecase;
 
 import br.com.ludevsp.api.dto.UserQueryDTO;
 import br.com.ludevsp.domain.entities.Movie;
 import br.com.ludevsp.domain.entities.User;
 import br.com.ludevsp.domain.exceptions.UserNotFoundException;
-import br.com.ludevsp.domain.interfaces.repositories.FavoriteMoviesRepository;
 import br.com.ludevsp.domain.interfaces.repositories.UserRepository;
 import br.com.ludevsp.domain.interfaces.services.MovieService;
 import br.com.ludevsp.domain.interfaces.usecase.UserUseCase;
@@ -95,7 +94,6 @@ public class UserUseCaseImpl implements UserUseCase {
             return predicate;
         };
     }
-
 
 
     @Override

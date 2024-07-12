@@ -1,4 +1,4 @@
-package br.com.ludevsp.application.useCase;
+package br.com.ludevsp.application.usecase;
 
 import br.com.ludevsp.domain.entities.Movie;
 import br.com.ludevsp.domain.interfaces.services.MovieService;

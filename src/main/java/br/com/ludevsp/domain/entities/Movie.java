@@ -1,9 +1,6 @@
 package br.com.ludevsp.domain.entities;
 
 
-
-
-
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,7 +38,7 @@ public class Movie {
     @Column(name = "voto_count", nullable = false)
     private Integer voteCount;
 
-    public Movie(Long  movieId, String title, String originalTitle, String originalLanguage, String overview, LocalDate releaseDate, Float voteAverage, Integer voteCount) {
+    public Movie(Long movieId, String title, String originalTitle, String originalLanguage, String overview, LocalDate releaseDate, Float voteAverage, Integer voteCount) {
         this.movieId = movieId;
         this.title = title;
         this.originalTitle = originalTitle;
