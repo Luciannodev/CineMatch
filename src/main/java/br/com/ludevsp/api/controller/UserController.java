@@ -8,6 +8,7 @@ import br.com.ludevsp.api.dto.UserResponseDto;
 import br.com.ludevsp.application.useCase.UserUseCaseImpl;
 import br.com.ludevsp.domain.dto.ApiResponse;
 import br.com.ludevsp.domain.interfaces.usecase.UserUseCase;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,10 +52,5 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "/add_favorite_movie", method = RequestMethod.POST)
-    public ResponseEntity<ApiResponse<String>> addFavoriteMovie(@RequestParam Number idUser, @RequestParam String movieName) {
-        userService.addFavoriteMovie(idUser, movieName);
-        return new ResponseEntity<>(new ApiResponse<>("movie successfully added to favorites"), HttpStatus.OK);
 
-    }
 }

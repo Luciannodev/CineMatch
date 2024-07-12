@@ -8,6 +8,7 @@ import br.com.ludevsp.domain.interfaces.repositories.FavoriteMoviesRepository;
 import br.com.ludevsp.domain.interfaces.repositories.UserRepository;
 import br.com.ludevsp.domain.interfaces.services.MovieService;
 import br.com.ludevsp.domain.interfaces.usecase.UserUseCase;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -18,21 +19,19 @@ import java.util.List;
 
 @Service
 public class UserUseCaseImpl implements UserUseCase {
-    private  UserRepository userRepository;
-    private FavoriteMoviesRepository favoriteMoviesRepository;
+    private UserRepository userRepository;
 
     private MovieService movieService;
 
-    public UserUseCaseImpl(UserRepository userRepository, FavoriteMoviesRepository favoriteMoviesRepository, MovieService movieService) {
+    public UserUseCaseImpl(UserRepository userRepository, MovieService movieService) {
         this.userRepository = userRepository;
-        this.favoriteMoviesRepository = favoriteMoviesRepository;
         this.movieService = movieService;
     }
 
     @Override
     public User createUser(User userRequest) {
         User User = userRepository.findByEmail(userRequest.getEmail());
-        if(User != null)
+        if (User != null)
             throw new InvalidParameterException("User already exists");
         return userRepository.save(userRequest);
     }
@@ -40,7 +39,7 @@ public class UserUseCaseImpl implements UserUseCase {
     @Override
     public void deleteUser(long idUser) {
         var user = userRepository.findByUserId(idUser);
-        if(user == null)
+        if (user == null)
             throw new UserNotFoundException("User not found");
         userRepository.delete(user);
     }
@@ -48,21 +47,20 @@ public class UserUseCaseImpl implements UserUseCase {
     @Override
     public User updateUser(User userRequest) {
         var existingUser = userRepository.findByUserId(userRequest.getUserId());
-        if(existingUser == null)
+        if (existingUser == null)
             throw new UserNotFoundException("User not found");
         SetNewValueEntity(userRequest, existingUser);
         return userRepository.save(existingUser);
     }
 
     private static void SetNewValueEntity(User userRequest, User existingUser) {
-        for(Field field : User.class.getDeclaredFields()){
+        for (Field field : User.class.getDeclaredFields()) {
             field.setAccessible(true);
             try {
                 Object newValue = field.get(userRequest);
-                if(newValue != null)
+                if (newValue != null)
                     field.set(existingUser, newValue);
-            }
-            catch (IllegalAccessException e){
+            } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
@@ -71,6 +69,11 @@ public class UserUseCaseImpl implements UserUseCase {
     @Override
     public List<User> getUsers(UserQueryDTO queryUser) {
         return userRepository.findAll(this.userSpecification(queryUser));
+    }
+
+    @Override
+    public List<Movie> addFavoriteMovie(Number email, String movieName) throws JsonProcessingException {
+        return null;
     }
 
     public Specification<User> userSpecification(UserQueryDTO queryDTO) {
@@ -93,15 +96,7 @@ public class UserUseCaseImpl implements UserUseCase {
         };
     }
 
-    @Override
-    public void addFavoriteMovie(Number userId, String movieName) {
-        var user = userRepository.findByUserId(userId.longValue());
-        if(user == null)
-            throw new UserNotFoundException("User not found");
-        var movie = movieService.getMovie(movieName);
-        if(movie == null)
-            throw new InvalidParameterException("Movie not found");
-    }
+
 
     @Override
     public void addHatedMovie(String email, String movieId) {
