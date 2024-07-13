@@ -71,7 +71,7 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     @Override
-    public List<Movie> addFavoriteMovie(Number email, String movieName) throws JsonProcessingException {
+    public List<Movie> addFavoriteMovie(Number email, String movieName)  {
         return null;
     }
 
