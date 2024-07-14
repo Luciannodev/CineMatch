@@ -21,5 +21,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<ErroDTO>> handleInvalidParameterException(InvalidParameterException ex) {
         return new ResponseEntity<>(new ApiResponse<>(new ErroDTO(ex.getMessage(), 400), false), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(ServerExceptionError.class)
+    public ResponseEntity<ApiResponse<ErroDTO>> handleServerExceptionError(ServerExceptionError ex) {
+        return new ResponseEntity<>(new ApiResponse<>(new ErroDTO(ex.getMessage(), 503), false), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
 }

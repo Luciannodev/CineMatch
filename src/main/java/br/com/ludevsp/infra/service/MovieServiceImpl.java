@@ -1,6 +1,8 @@
 package br.com.ludevsp.infra.service;
 
 import br.com.ludevsp.domain.entities.Movie;
+import br.com.ludevsp.domain.exceptions.ServerExceptionError;
+import br.com.ludevsp.domain.interfaces.repositories.MovieRespository;
 import br.com.ludevsp.domain.interfaces.services.MovieService;
 import br.com.ludevsp.infra.dto.MovieDto;
 import br.com.ludevsp.infra.dto.ResponseApi;
@@ -23,6 +25,8 @@ public class MovieServiceImpl implements MovieService {
 
     private ResponseToEntityMapper mapper;
 
+    private MovieRespository movieRespository;
+
     @Value("${TMDB.api.key}")
     private String TMDB_API_SECRET;
 
@@ -33,10 +37,10 @@ public class MovieServiceImpl implements MovieService {
     private String LANGUAGE;
     private Integer PAGE = 1;
 
-    public MovieServiceImpl(ResponseToEntityMapper mapper) {
+    public MovieServiceImpl(ResponseToEntityMapper mapper, MovieRespository movieRespository) {
         this.mapper = mapper;
+        this.movieRespository = movieRespository;
     }
-
 
     @Override
     public List<Movie> getMovies(String movieName) {
@@ -71,22 +75,27 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie getMovieById(String movieId) {
+    public Movie getMovieById(String idMovie) {
         UriComponentsBuilder builder;
         builder = UriComponentsBuilder.fromHttpUrl(TMDB_API_URL + "/movie/")
-                .path(movieId);
+                .path(idMovie);
         ResponseEntity<String> response = callTMDBApi(builder);
-        MovieDto movieResponse = mapper.responseToEntity(response, new TypeReference<>() {
-        });
+        MovieDto movieResponse = mapper.responseToEntity(response, new TypeReference<>() {});
+        movieRespository.save(MovieDto.toEntity(movieResponse));
         return MovieDto.toEntity(movieResponse);
     }
 
     private ResponseEntity<String> callTMDBApi(UriComponentsBuilder builder) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<String> parameters = getParametersHttp();
-        return restTemplate.exchange(
-                builder.toUriString(),
-                HttpMethod.GET, parameters, String.class);
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity<String> parameters = getParametersHttp();
+            return restTemplate.exchange(
+                    builder.toUriString(),
+                    HttpMethod.GET, parameters, String.class);
+        }catch (Exception e){
+            throw new ServerExceptionError("Error in call TMDB API");
+        }
+
     }
 
     private HttpEntity<String> getParametersHttp() {

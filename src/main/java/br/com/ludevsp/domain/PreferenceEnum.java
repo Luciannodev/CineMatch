@@ -7,7 +7,7 @@ import lombok.Getter;
 public enum PreferenceEnum {
     FAVORITE((byte) 1, "Favorite"),
     HATED((byte) 2, "Hated"),
-    SUGGESTION((byte) 3, "Suggestion");
+    SUGGESTED((byte) 3, "Suggestion");
 
     private final Byte id;
     private final String name;

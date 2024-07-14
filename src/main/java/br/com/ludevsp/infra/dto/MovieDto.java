@@ -11,6 +11,9 @@ import java.util.List;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDto {
+    @JsonProperty("id")
+    private long id;
+
     @JsonProperty("adult")
     private boolean adult;
 
@@ -19,9 +22,6 @@ public class MovieDto {
 
     @JsonProperty("genre_ids")
     private List<Integer> genreIds;
-
-    @JsonProperty("id")
-    private long id;
 
     @JsonProperty("original_language")
     private String originalLanguage;

@@ -8,6 +8,7 @@ import br.com.ludevsp.api.dto.UserResponseDto;
 import br.com.ludevsp.application.usecase.UserUseCaseImpl;
 import br.com.ludevsp.domain.dto.ApiResponse;
 import br.com.ludevsp.domain.interfaces.usecase.UserUseCase;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +50,25 @@ public class UserController {
     public ResponseEntity<ApiResponse<List<UserResponseDto>>> getUser(@ModelAttribute UserQueryDTO userDTOQuery) {
         var users = userService.getUsers(userDTOQuery);
         return new ResponseEntity<>(new ApiResponse<>(users.stream().map(UserMapper::toDto).toList()), HttpStatus.OK);
+
+    }
+
+    @RequestMapping(value = "/add_favorite_movie", method = RequestMethod.POST)
+    public ResponseEntity<ApiResponse<String>> addFavoriteMovie(@RequestParam long idUser, @RequestParam String idMovie) throws JsonProcessingException {
+        userService.addFavoriteMovie(idUser, idMovie);
+        return new ResponseEntity<>(new ApiResponse<>("movie successfully added to favorites"), HttpStatus.OK);
+
+    }
+    @RequestMapping(value = "/add_hated_movie", method = RequestMethod.POST)
+    public ResponseEntity<ApiResponse<String>> addHatedMovie(@RequestParam long idUser, @RequestParam String idMovie) throws JsonProcessingException {
+        userService.addHatedMovie(idUser, idMovie);
+        return new ResponseEntity<>(new ApiResponse<>("movie successfully added to hated"), HttpStatus.OK);
+
+    }
+    @RequestMapping(value = "/add_suggested_movie", method = RequestMethod.POST)
+    public ResponseEntity<ApiResponse<String>> addSuggestedMovie(@RequestParam long idUser, @RequestParam String idMovie) throws JsonProcessingException {
+        userService.addSuggestedMovie(idUser, idMovie);
+        return new ResponseEntity<>(new ApiResponse<>("movie successfully added to suggested"), HttpStatus.OK);
 
     }
 

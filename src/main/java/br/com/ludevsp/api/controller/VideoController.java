@@ -29,8 +29,8 @@ public class VideoController {
     }
 
     @RequestMapping(value = "/get_movie", method = RequestMethod.GET)
-    public ResponseEntity<ApiResponse<Movie>> getMovieById(@RequestParam String movieId) {
-        var movie = videoUsecase.getVideoById(movieId);
+    public ResponseEntity<ApiResponse<Movie>> getMovieById(@RequestParam String idMovie) {
+        var movie = videoUsecase.getVideoById(idMovie);
         return new ResponseEntity<>(new ApiResponse<>(movie), HttpStatus.OK);
     }
 }

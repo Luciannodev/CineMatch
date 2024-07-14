@@ -13,9 +13,8 @@ import java.time.LocalDate;
 @Data
 public class Movie {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "movie_id")
-    private Long movieId;
+    private Long idMovie;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -26,7 +25,8 @@ public class Movie {
     @Column(name = "original_language", nullable = false)
     private String originalLanguage;
 
-    @Column(name = "overview", nullable = false)
+
+    @Column(name = "overview", nullable = false, columnDefinition = "LONGTEXT")
     private String overview;
 
     @Column(name = "release_date", nullable = false)
@@ -38,8 +38,8 @@ public class Movie {
     @Column(name = "voto_count", nullable = false)
     private Integer voteCount;
 
-    public Movie(Long movieId, String title, String originalTitle, String originalLanguage, String overview, LocalDate releaseDate, Float voteAverage, Integer voteCount) {
-        this.movieId = movieId;
+    public Movie(Long idMovie, String title, String originalTitle, String originalLanguage, String overview, LocalDate releaseDate, Float voteAverage, Integer voteCount) {
+        this.idMovie = idMovie;
         this.title = title;
         this.originalTitle = originalTitle;
         this.originalLanguage = originalLanguage;

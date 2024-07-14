@@ -27,7 +27,7 @@ public class VideoUseCaseImpl implements VideoUsecase {
     }
 
     @Override
-    public Movie getVideoById(String movieId) {
-        return movieService.getMovieById(movieId);
+    public Movie getVideoById(String idMovie) {
+        return movieService.getMovieById(idMovie);
     }
 }
