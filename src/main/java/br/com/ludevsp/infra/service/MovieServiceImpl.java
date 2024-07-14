@@ -76,13 +76,23 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie getMovieById(String idMovie) {
+        var movie = getMovieDb(idMovie);
+        if (movie != null) {
+            return movie;
+        }
         UriComponentsBuilder builder;
         builder = UriComponentsBuilder.fromHttpUrl(TMDB_API_URL + "/movie/")
                 .path(idMovie);
         ResponseEntity<String> response = callTMDBApi(builder);
-        MovieDto movieResponse = mapper.responseToEntity(response, new TypeReference<>() {});
+        MovieDto movieResponse = mapper.responseToEntity(response, new TypeReference<>() {
+        });
         movieRespository.save(MovieDto.toEntity(movieResponse));
         return MovieDto.toEntity(movieResponse);
+    }
+
+    private Movie getMovieDb(String idMovie) {
+        var movie = movieRespository.findById(idMovie);
+        return movie.orElse(null);
     }
 
     private ResponseEntity<String> callTMDBApi(UriComponentsBuilder builder) {
@@ -92,7 +102,7 @@ public class MovieServiceImpl implements MovieService {
             return restTemplate.exchange(
                     builder.toUriString(),
                     HttpMethod.GET, parameters, String.class);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ServerExceptionError("Error in call TMDB API");
         }
 
