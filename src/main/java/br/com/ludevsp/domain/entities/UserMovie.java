@@ -1,6 +1,6 @@
 package br.com.ludevsp.domain.entities;
 
-import br.com.ludevsp.domain.PreferenceEnum;
+import br.com.ludevsp.domain.enums.PreferenceEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

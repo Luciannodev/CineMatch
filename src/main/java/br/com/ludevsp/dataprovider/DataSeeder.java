@@ -1,6 +1,6 @@
 package br.com.ludevsp.dataprovider;
 
-import br.com.ludevsp.domain.PreferenceEnum;
+import br.com.ludevsp.domain.enums.PreferenceEnum;
 import br.com.ludevsp.domain.entities.Preference;
 import br.com.ludevsp.domain.interfaces.repositories.PreferenceRepository;
 import org.springframework.stereotype.Component;

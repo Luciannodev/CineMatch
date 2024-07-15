@@ -1,4 +1,4 @@
-package br.com.ludevsp.domain;
+package br.com.ludevsp.domain.enums;
 
 
 import lombok.Getter;

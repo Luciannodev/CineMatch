@@ -1,9 +1,9 @@
 package br.com.ludevsp.application.usecase;
 
 import br.com.ludevsp.api.dto.UserQueryDTO;
-import br.com.ludevsp.domain.PreferenceEnum;
-import br.com.ludevsp.domain.entities.Movie;
 import br.com.ludevsp.domain.entities.Preference;
+import br.com.ludevsp.domain.enums.PreferenceEnum;
+import br.com.ludevsp.domain.entities.Movie;
 import br.com.ludevsp.domain.entities.User;
 import br.com.ludevsp.domain.entities.UserMovie;
 import br.com.ludevsp.domain.exceptions.UserNotFoundException;
@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserUseCaseImpl implements UserUseCase {
@@ -105,7 +107,7 @@ public class UserUseCaseImpl implements UserUseCase {
         if (preference != null) {
             userMovieRepository.delete(preference);
         }
-        userMovieRepository.save(new UserMovie(user.getUserId(), movie.getIdMovie(), PreferenceEnum.SUGGESTED));
+        userMovieRepository.save(new UserMovie(user.getUserId(), movie.getIdMovie(), PreferenceEnum.FAVORITE));
     }
 
 
@@ -132,8 +134,49 @@ public class UserUseCaseImpl implements UserUseCase {
 
     }
 
-    private User getUser(long idUser) {
+    @Override
+    public void removePreference(long idUser, long movieName) {
+        var user = getUser(idUser);
+        var movie = getMovie(String.valueOf(movieName));
+        var userMovie = getUserMovie(user.getUserId(), movie.getIdMovie());
+        userMovieRepository.delete(userMovie);
+    }
 
+    @Override
+    public List<Movie> getFavoriteMovies(long idUser) {
+        var userMovies = userMovieRepository.findByUserId(idUser);
+        var favoriteUserMovies = userMovies.stream()
+                .filter(userMovie -> Objects.equals(userMovie.getPreferenceId(), PreferenceEnum.FAVORITE.getId()))
+                .toList();
+        return favoriteUserMovies
+                .stream().map(userMovie -> movieService.getMovieById(String.valueOf(userMovie.getMovieId())))
+                .toList();
+    }
+
+    @Override
+    public List<Movie> getHatedMovies(long idUser) {
+        var userMovies = userMovieRepository.findByUserId(idUser);
+        var hatedUserMovies = userMovies.stream()
+                .filter(userMovie -> Objects.equals(userMovie.getPreferenceId(), PreferenceEnum.HATED.getId()))
+                .toList();
+        return hatedUserMovies
+                .stream().map(userMovie -> movieService.getMovieById(String.valueOf(userMovie.getMovieId())))
+                .toList();
+
+    }
+
+    @Override
+    public List<Movie> getSuggestedMovies(long idUser) {
+        var userMovies = userMovieRepository.findByUserId(idUser);
+        var suggestedUserMovies = userMovies.stream()
+                .filter(userMovie -> Objects.equals(userMovie.getPreferenceId(), PreferenceEnum.SUGGESTED.getId()))
+                .toList();
+        return suggestedUserMovies
+                .stream().map(userMovie -> movieService.getMovieById(String.valueOf(userMovie.getMovieId())))
+                .toList();
+    }
+
+    private User getUser(long idUser) {
         var user = userRepository.findByUserId(idUser);
         if (user == null)
             throw new UserNotFoundException("User not found");
@@ -147,44 +190,10 @@ public class UserUseCaseImpl implements UserUseCase {
         return movie;
     }
 
-    @Override
-    public void removeFavoriteMovie(long idUser, long idMovie) {
-        var userMovie = getUserMovie(idUser, idMovie);
-        userMovieRepository.delete(userMovie);
-
-    }
-
-    @Override
-    public void removeHatedMovie(long idUser, long idMovie) {
-        var userMovie = getUserMovie(idUser, idMovie);
-        userMovieRepository.delete(userMovie);
-    }
-
-    @Override
-    public void removeSuggestedMovie(long idUser, long movieName) {
-        var userMovie = getUserMovie(idUser, movieName);
-        userMovieRepository.delete(userMovie);
-    }
-
     private UserMovie getUserMovie(long idUser, long movieName) {
         var userMovie = userMovieRepository.findByUserIdAndMovieId(idUser, movieName);
         if (userMovie == null)
             throw new InvalidParameterException("Preference not found");
         return userMovie;
-    }
-
-    @Override
-    public List<Movie> getFavoriteMovies(String email) {
-        return null;
-    }
-
-    @Override
-    public List<Movie> getHatedMovies(String email) {
-        return null;
-    }
-
-    @Override
-    public List<Movie> getSuggestedMovies(String email) {
-        return null;
     }
 }
