@@ -16,7 +16,7 @@ public interface UserUseCase {
     List<User> getUsers(UserQueryDTO queryUser);
     void addFavoriteMovie(long idUser, String movieName) throws JsonProcessingException;
     void addHatedMovie(long idUser, String movieName) throws JsonProcessingException;
-    void addSuggestedMovie(long idUser, String movieName) throws JsonProcessingException;
+    void suggestedMovieGenerates(long idUser) throws JsonProcessingException;
     void removePreference(long idUser, long movieName);
     List<Movie> getFavoriteMovies(long idUser);
     List<Movie> getHatedMovies(long idUser);

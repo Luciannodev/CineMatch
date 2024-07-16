@@ -68,8 +68,8 @@ public class UserController {
 
     }
     @RequestMapping(value = "/add_suggested_movie", method = RequestMethod.POST)
-    public ResponseEntity<ApiResponse<String>> addSuggestedMovie(@RequestParam long idUser, @RequestParam String idMovie) throws JsonProcessingException {
-        userService.addSuggestedMovie(idUser, idMovie);
+    public ResponseEntity<ApiResponse<String>> generateSuggestedMovie(@RequestParam long idUser) throws JsonProcessingException {
+        userService.suggestedMovieGenerates(idUser);
         return new ResponseEntity<>(new ApiResponse<>("movie successfully added to suggested"), HttpStatus.OK);
 
     }

@@ -1,4 +1,4 @@
-package br.com.ludevsp.infra.dto;
+package br.com.ludevsp.infra.service.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

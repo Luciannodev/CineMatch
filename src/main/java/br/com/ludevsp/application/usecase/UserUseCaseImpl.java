@@ -1,23 +1,23 @@
 package br.com.ludevsp.application.usecase;
 
 import br.com.ludevsp.api.dto.UserQueryDTO;
-import br.com.ludevsp.domain.entities.Preference;
-import br.com.ludevsp.domain.enums.PreferenceEnum;
 import br.com.ludevsp.domain.entities.Movie;
 import br.com.ludevsp.domain.entities.User;
 import br.com.ludevsp.domain.entities.UserMovie;
+import br.com.ludevsp.domain.enums.PreferenceEnum;
 import br.com.ludevsp.domain.exceptions.UserNotFoundException;
 import br.com.ludevsp.domain.interfaces.repositories.UserMovieRepository;
 import br.com.ludevsp.domain.interfaces.repositories.UserRepository;
 import br.com.ludevsp.domain.interfaces.services.MovieService;
+import br.com.ludevsp.domain.interfaces.services.OpenApiService;
 import br.com.ludevsp.domain.interfaces.usecase.UserUseCase;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,11 +29,14 @@ public class UserUseCaseImpl implements UserUseCase {
 
     private final UserMovieRepository userMovieRepository;
 
+    private final OpenApiService openApiService;
 
-    public UserUseCaseImpl(UserRepository userRepository, MovieService movieService, UserMovieRepository userMovieRepository) {
+
+    public UserUseCaseImpl(UserRepository userRepository, MovieService movieService, UserMovieRepository userMovieRepository, OpenApiService openApiService) {
         this.userRepository = userRepository;
         this.movieService = movieService;
         this.userMovieRepository = userMovieRepository;
+        this.openApiService = openApiService;
     }
 
     @Override
@@ -123,15 +126,14 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     @Override
-    public void addSuggestedMovie(long idUser, String idMovie) {
-        var movie = getMovie(idMovie);
+    public void suggestedMovieGenerates(long idUser) throws JsonProcessingException {
         var user = getUser(idUser);
-        var preference = userMovieRepository.findByUserIdAndMovieId(user.getUserId(), movie.getIdMovie());
-        if (preference != null) {
-            userMovieRepository.delete(preference);
-        }
-        userMovieRepository.save(new UserMovie(user.getUserId(), movie.getIdMovie(), PreferenceEnum.SUGGESTED));
-
+        var userMovies = userMovieRepository.findByUserId(user.getUserId());
+        var UserMoviesPreference = userMovies.stream()
+                .filter(userMovie -> !Objects.equals(userMovie.getPreferenceId(), PreferenceEnum.SUGGESTED.getId()))
+                .toList();
+        var moviesSuggesteds = openApiService.suggestMovies(UserMoviesPreference);
+        moviesSuggesteds.forEach(movie -> userMovieRepository.save(new UserMovie(user.getUserId(), movie.getIdMovie(), PreferenceEnum.SUGGESTED)));
     }
 
     @Override
